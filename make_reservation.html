@@ -1,0 +1,92 @@
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoyalSpot Café | Make a Reservation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav role="navigation" aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="menu.html">MENU</a></li>
+                <li class="mobile"><a href="make_reservation.html">RESERVATIONS</a></li>
+                <li class="mobile"><a href="hours_and_contact.html">CONTACTS</a></li>
+                <li class="logo"><a href="index.html">RoyalSpot Cafe Logo</a></li>
+                <li class="desktop"><a href="make_reservation.html">RESERVATIONS</a></li>
+                <li class="desktop"><a href="hours_and_contact.html">CONTACTS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>MAKE A RESERVATION</h1>
+        <p>Call us on <a href="tel:+27817996763">+27 81 799 6763</a>, email us at <a href="mailto:somiladyantyi17@gmail.com">somiladyantyi17@gmail.com</a>, or use our online reservation form.</p>
+
+        <!-- Display success or error messages -->
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert success" role="alert">
+                <?= htmlspecialchars($_SESSION['success']); ?>
+            </div>
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert error" role="alert">
+                <?= htmlspecialchars($_SESSION['error']); ?>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+
+        <form id="reservation-form" action="booking_processing.php" method="post">
+            <fieldset>
+                <legend>Contact Details</legend>
+                <label for="customer-name">Name:</label>
+                <input type="text" id="customer-name" name="customer-name" required><br><br>
+
+                <label for="customer-email">Email:</label>
+                <input type="email" id="customer-email" name="customer-email" required><br><br>
+
+                <label for="customer-phone">Phone Number:</label>
+                <input type="tel" id="customer-phone" name="customer-phone" required pattern="\+?[0-9]{7,15}"><br><br>
+            </fieldset>
+
+            <fieldset>
+                <legend>Book a Table</legend>
+                <label for="booking-date">Date:</label>
+                <input type="date" id="booking-date" name="booking-date" required><br><br>
+
+                <label for="booking-time">Time:</label>
+                <input type="time" id="booking-time" name="booking-time" required><br><br>
+
+                <label for="number-of-guests">Number of Guests:</label>
+                <input type="number" id="number-of-guests" name="number-of-guests" min="1" required><br><br>
+
+                <label for="smoking-preference">Smoking Area/Non-Smoking Area:</label>
+                <select id="smoking-preference" name="smoking-preference">
+                    <option value="smoking">Smoking Area</option>
+                    <option value="non-smoking">Non-smoking Area</option>
+                </select><br><br>
+
+                <label for="table-location">Indoor/Outdoor:</label>
+                <select id="table-location" name="table-location">
+                    <option value="indoor">Indoor</option>
+                    <option value="outdoor">Outdoor</option>
+                </select><br><br>
+            </fieldset>
+
+            <input type="submit" value="Book Table">
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 RoyalSpot Café. All rights reserved.</p>
+    </footer>
+</body>
+</html>

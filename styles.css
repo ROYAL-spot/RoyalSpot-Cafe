@@ -1,0 +1,195 @@
+/* Basic styling for the body */
+body {
+    background: rgb(224, 215, 216);
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for links */
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* HEADER styling */
+header {
+    background-color: black;
+    background-image: url(images/heroimage.jpg);
+    background-size: 100%;
+    background-position: center;
+    text-align: center;
+    padding: 20px;
+    height: 300px;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-top: 30px;
+}
+
+header .mobile {
+    display: none;
+}
+
+header .logo a {
+    background-image: url("images/RoyalSPOT cafe.png");
+    background-size: 300px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 80px;
+    position: relative;
+    text-indent: -9999999px;
+    top: -30px;
+    width: 300px;
+}
+
+/* Navigation styling */
+nav li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Responsive rules for header */
+@media screen and (max-width:684px) {
+    header {
+        height: 200px;
+    }
+
+    header .mobile {
+        display: inline-block;
+    }
+
+    header .desktop {
+        display: none;
+    }
+}
+
+/* Features section styling */
+.features {
+    background: rgb(224, 215, 216);
+    color: black;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.features figure {
+    margin: auto;
+    text-align: center;
+    text-transform: uppercase;
+    width: 200px;
+}
+
+.features figure img {
+    border-radius: 50%;
+    width: 200px;
+}
+
+/* Basic styling for buttons */
+input[type="submit"], .button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+/* Container styling */
+.container {
+    width: 1600px;
+    margin: auto;
+}
+
+.subcontainer {
+    width: 85%;
+    margin: auto;
+}
+
+/* Cookies bar styling */
+#cookies {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1;
+    display: none;
+}
+
+.cookies {
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cookies a {
+    color: yellow;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+#cookies-btn {
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    border: 3px solid rgb(230, 223, 223);
+    background-color: black;
+    color: white;
+}
+
+/* Responsive rules for containers */
+@media(max-width:1600px) {
+    .container {
+        width: 100%;
+    }
+}
+
+@media(max-width:1024px) {
+    .cookies {
+        padding: 10px 0;
+    }
+}
+
+/* Footer styling */
+footer {
+    background: black;
+    padding: 5px 5px;
+    color: gray;
+    font-size: 12px;
+    text-align: center;
+}
+/*PHP Styling*/
+.alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

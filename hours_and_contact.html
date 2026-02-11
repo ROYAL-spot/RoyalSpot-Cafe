@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoyalSpot Cafe</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="map.css">
+    <style>
+        /* Accessible replacement for deprecated <marquee> */
+        .marquee {
+            overflow: hidden;
+            background: transparent;
+        }
+        .marquee h1 {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            margin: 0;
+            animation: marquee 12s linear infinite;
+            font-size: 1.25rem;
+        }
+        @keyframes marquee {
+            0%   { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+        /* Respect user preference for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .marquee h1 {
+                animation: none;
+                padding-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="menu.html">MENU</a></li>
+        </ul>
+    </nav>
+
+    <div class="social">
+        <h2>Follow Us</h2>
+        <ul>
+            <li>Facebook: @RoyalSPOTCafé</li>
+            <li>Instagram: @RoyalSPOT_Café</li>
+        </ul>
+    </div>
+
+    <div class="marquee" role="status" aria-live="polite">
+        <h1>We look forward to serving you!</h1>
+    </div>
+</header>
+
+<main>
+    <section aria-labelledby="contact-heading">
+        <h2 id="contact-heading">Contact &amp; Location</h2>
+        <figure>
+            <iframe class="map-iframe" title="RoyalSpot Cafe location map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7968.995400314075!2d26.88459976578574!3d-31.893280478661385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e623f15b15d3c99%3A0x2c0a93e175ee5250!2sThe%20Black%20Swan!5e1!3m2!1sen!2sus!4v1740727584369!5m2!1sen!2sus" width="600" height="450" loading="lazy" allowfullscreen></iframe>
+            <figcaption>Find us on Google Maps</figcaption>
+        </figure>
+
+        <ul>
+            <li><i class="fa-brands fa-square-whatsapp"></i> 0817996763</li>
+            <li>Email: somiladyantyi17@gmail.com</li>
+        </ul>
+    </section>
+
+    <section aria-labelledby="hours-heading">
+        <h2 id="hours-heading">Hours of Operation</h2>
+        <ul>
+            <li>Monday to Friday: 08:00 - 22:00</li>
+            <li>Saturday: 09:00 - 21:00</li>
+            <li>Sunday &amp; Public Holidays: 09:00 - 19:00</li>
+        </ul>
+    </section>
+</main>
+
+<footer>
+    <p>&copy;2024 RoyalSPOT CAFÉ. All rights reserved.</p>
+</footer>
+</body>
+</html>

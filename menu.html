@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoyalSpot Cafe</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .menu-section {
+            margin: 2rem 0;
+        }
+        .menu-section h2 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .menu-item button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .menu-item button:hover {
+            background-color: #218838;
+        }
+        .basket {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .basket h3 {
+            margin-top: 0;
+        }
+        .basket-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        .basket-item button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .basket-item button:hover {
+            background-color: #c82333;
+        }
+        .checkout {
+            text-align: right;
+            margin-top: 1rem;
+        }
+        .checkout button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .checkout button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="menu.html">MENU</a></li>
+                <li class="mobile"><a href="make_reservation.html">RESERVATIONS</a></li>
+                <li class="mobile"><a href="hours_and_contact.html">CONTACTS</a></li>
+                <li class="logo"><a href="index.html">RoyalSpot Cafe Logo</a></li>
+                <li class="desktop"><a href="make_reservation.html">RESERVATIONS</a></li>
+                <li class="desktop"><a href="hours_and_contact.html">CONTACTS</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="menu-section" id="menu">
+            <h2>Burgers</h2>
+            <div class="menu-item">
+                <span>Classic Beef Burger - R45</span>
+                <button onclick="addToBasket('Classic Beef Burger', 45)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Chicken Burger - R40</span>
+                <button onclick="addToBasket('Chicken Burger', 40)">Add to Basket</button>
+            </div>
+
+            <h2>Pizzas</h2>
+            <div class="menu-item">
+                <span>Margherita Pizza - R55</span>
+                <button onclick="addToBasket('Margherita Pizza', 55)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>BBQ Chicken Pizza - R65</span>
+                <button onclick="addToBasket('BBQ Chicken Pizza', 65)">Add to Basket</button>
+            </div>
+
+            <h2>Desserts</h2>
+            <div class="menu-item">
+                <span>Chocolate Brownie - R30</span>
+                <button onclick="addToBasket('Chocolate Brownie', 30)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Ice Cream Sundae - R25</span>
+                <button onclick="addToBasket('Ice Cream Sundae', 25)">Add to Basket</button>
+            </div>
+
+            <h2>Drinks</h2>
+
+            <div class="menu-item">
+               <span>Orange juice - R15</span>
+               <button onclick="addToBasket('Orange juice', 15)">Add to Basket</button>
+            </div>
+
+               <div class="menu-item">
+                  <span>Sprite - R15</span>
+                  <button onclick="addToBasket('Sprite', 15)">Add to Basket</button>
+              </div>
+              <div class="menu-item">
+                <span>Coke - R15</span>
+                <button onclick="addToBasket('Coke', 15)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Water - R10</span>
+                <button onclick="addToBasket('Water', 10)">Add to Basket</button>
+            </div>
+
+            <h2>Beers</h2>
+            <div class="menu-item">
+                <span>Corona- R45</span>
+                <button onclick="addToBasket('Corona-', 35)">Add to Basket</button>
+            </div>
+            
+            <div class="menu-item">
+                <span>Carling Black Label - R35</span>
+                <button onclick="addToBasket('Carling Black Label', 35)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Castle Lager - R35</span>
+                <button onclick="addToBasket('Castle Lager', 35)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Heineken- R35</span>
+                <button onclick="addToBasket('Heineken-', 35)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Savanna Dry - R40</span>
+                <button onclick="addToBasket('Savanna Dry', 40)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Flying Fish- R40</span>
+                <button onclick="addToBasket('Flying Fish', 35)">Add to Basket</button>
+            </div>
+
+            <h2>Spirits</h2>
+            <div class="menu-item">
+                <span>Hendrick's Gin - R65</span>
+                <button onclick="addToBasket('Hendrick\'s Gin', 65)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Johnnie Walker Black Label Whiskey - R90</span>
+                <button onclick="addToBasket('Johnnie Walker Black Label Whiskey', 90)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Smirnoff Vodka - R50</span>
+                <button onclick="addToBasket('Smirnoff Vodka', 50)">Add to Basket</button>
+            </div>
+
+            <h2>Wines</h2>
+            <div class="menu-item">
+                <span>Nederburg Cabernet Sauvignon - R85</span>
+                <button onclick="addToBasket('Nederburg Cabernet Sauvignon', 85)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>Four Cousins Sweet Red Wine - R75</span>
+                <button onclick="addToBasket('Four Cousins Sweet Red Wine', 75)">Add to Basket</button>
+            </div>
+            <div class="menu-item">
+                <span>KWV Chardonnay - R90</span>
+                <button onclick="addToBasket('KWV Chardonnay', 90)">Add to Basket</button>
+            </div>
+        </div>
+
+        <div class="basket" id="basket">
+            <h3>Your Basket</h3>
+            <div id="basket-items"></div>
+            <div class="checkout">
+                <strong>Total: R<span id="total">0</span></strong>
+                <button onclick="checkout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy;2024 RoyalSPOT CAFÉ. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const basket = [];
+
+        function addToBasket(item, price) {
+            basket.push({ item, price });
+            updateBasket();
+        }
+
+        function removeFromBasket(index) {
+            basket.splice(index, 1);
+            updateBasket();
+        }
+
+        function updateBasket() {
+            const basketItems = document.getElementById('basket-items');
+            const total = document.getElementById('total');
+            basketItems.innerHTML = '';
+            let totalPrice = 0;
+            basket.forEach((basketItem, index) => {
+                totalPrice += basketItem.price;
+                basketItems.innerHTML += `
+                    <div class="basket-item">
+                        <span>${basketItem.item} - R${basketItem.price}</span>
+                        <button onclick="removeFromBasket(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            total.textContent = totalPrice;
+        }
+
+        function checkout() {
+            if (basket.length === 0) {
+                alert('Your basket is empty!');
+                return;
+            }
+            alert(`Thank you for your order! Total: R${document.getElementById('total').textContent}`);
+            basket.length = 0;
+            updateBasket();
+        }
+    </script>
+</body>
+</html>
