@@ -17,7 +17,7 @@ A full-stack web application designed for a café to manage table bookings seaml
 
 ## 📸 Preview
 <p align="center">
-  <img src="images\preview.jpg" alt="RoyalSpot Cafe Preview" width="800">
+  <img src="preview.jpg" alt="RoyalSpot Cafe Preview" width="800">
 </p>
 
 
