@@ -16,7 +16,10 @@ A full-stack web application designed for a café to manage table bookings seaml
 * **Server Environment:** Laragon / Apache
 
 ## 📸 Preview
-*Insert a screenshot of your reservation page here*
+<p align="center">
+  <img src="images\preview.jpg" alt="RoyalSpot Cafe Preview" width="800">
+</p>
+
 
 ## ⚙️ Setup
 1. Clone the repository into your `laragon/www` folder.
