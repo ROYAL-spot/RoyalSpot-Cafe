@@ -93,6 +93,12 @@
         .checkout button:hover {
             background-color: #0056b3;
         }
+        .special-notes textarea {
+            width: 100%;
+            height: 60px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 
@@ -110,6 +116,18 @@
             </ul>
         </nav>
     </header>
+
+    <div class="container">
+        <div class="table-selector">
+            <i class="fa fa-chair"></i>
+            <label for="tableNum"><strong>Where are you sitting?</strong></label>
+            <select id="tableNum">
+                <option value="Table 1">Table 1</option>
+                <option value="Table 2">Table 2</option>
+                <option value="Table 3">Table 3</option>
+                <option value="Table 4">Table 4</option>
+            </select>
+        </div>
 
     <div class="container">
         <div class="menu-section" id="menu">
@@ -222,10 +240,15 @@
         <div class="basket" id="basket">
             <h3>Your Basket</h3>
             <div id="basket-items"></div>
+            <div class="special-notes">
+                <label for="notes"><strong>Special Instructions:</strong></label><br>
+                <textarea id="notes" placeholder="e.g. No onions, Medium rare..."></textarea>
+            </div>
             <div class="checkout">
                 <strong>Total: R<span id="total">0</span></strong>
                 <button onclick="checkout()">Checkout</button>
             </div>
+            
         </div>
     </div>
 
@@ -233,45 +256,113 @@
         <p>&copy;2024 RoyalSPOT CAFÉ. All rights reserved.</p>
     </footer>
 
-    <script>
-        const basket = [];
+ <script>
+    const basket = [];
 
-        function addToBasket(item, price) {
-            basket.push({ item, price });
-            updateBasket();
-        }
+    window.onload = function() {
+    const savedBasket = localStorage.getItem('cafe_basket');
+    if (savedBasket) {
+        basket.push(...JSON.parse(savedBasket));
+        updateBasket();
+    }
+};
 
-        function removeFromBasket(index) {
-            basket.splice(index, 1);
-            updateBasket();
-        }
+    function addToBasket(item, price) {
+        basket.push({ item, price });
+        updateBasket();
+    }
 
-        function updateBasket() {
-            const basketItems = document.getElementById('basket-items');
-            const total = document.getElementById('total');
-            basketItems.innerHTML = '';
-            let totalPrice = 0;
-            basket.forEach((basketItem, index) => {
-                totalPrice += basketItem.price;
-                basketItems.innerHTML += `
-                    <div class="basket-item">
-                        <span>${basketItem.item} - R${basketItem.price}</span>
-                        <button onclick="removeFromBasket(${index})">Remove</button>
-                    </div>
-                `;
-            });
-            total.textContent = totalPrice;
-        }
+    function removeFromBasket(index) {
+        basket.splice(index, 1);
+        updateBasket();
+    }
 
-        function checkout() {
-            if (basket.length === 0) {
-                alert('Your basket is empty!');
-                return;
-            }
-            alert(`Thank you for your order! Total: R${document.getElementById('total').textContent}`);
-            basket.length = 0;
-            updateBasket();
+   function updateBasket() {
+    const basketItems = document.getElementById('basket-items');
+    const total = document.getElementById('total');
+    basketItems.innerHTML = '';
+    let totalPrice = 0;
+    
+    basket.forEach((basketItem, index) => {
+        totalPrice += basketItem.price;
+        basketItems.innerHTML += `
+            <div class="basket-item">
+                <span>${basketItem.item} - R${basketItem.price}</span>
+                <button onclick="removeFromBasket(${index})">Remove</button>
+            </div>
+        `;
+    });
+    total.textContent = totalPrice;
+    // Save to memory so it stays there if they "Modify"
+    localStorage.setItem('cafe_basket', JSON.stringify(basket));
+}
+
+function checkout() {
+    if (basket.length === 0) {
+        alert('Your basket is empty!');
+        return;
+    }
+
+    const tableNum = document.getElementById('tableNum').value;
+    const totalPrice = document.getElementById('total').textContent;
+    const notes = document.getElementById('notes').value; 
+    let itemsList = "";
+    
+    basket.forEach(item => {
+        itemsList += `• ${item.item} - R${item.price}\n`;
+    });
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'save_orders.php';
+
+    const fields = {
+        table_num: tableNum,
+        items: itemsList,
+        notes: notes,
+        total: totalPrice
+    };
+
+    for (const key in fields) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+    function showConfirmation() {
+        // Create elements if they don't exist
+        if (!document.getElementById('order-confirmation')) {
+            const overlay = document.createElement('div');
+            overlay.id = 'overlay';
+            overlay.className = 'overlay';
+            
+            const box = document.createElement('div');
+            box.id = 'order-confirmation';
+            box.innerHTML = `
+                <i class="fa fa-check-circle" style="color: #28a745; font-size: 3rem;"></i>
+                <h2>Order Sent!</h2>
+                <p>We've opened WhatsApp to send your order to the kitchen.</p>
+                <button onclick="closeConfirmation()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Got it</button>
+            `;
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(box);
         }
-    </script>
+        
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('order-confirmation').style.display = 'block';
+    }
+
+    function closeConfirmation() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('order-confirmation').style.display = 'none';
+    }
+</script>
 </body>
 </html>

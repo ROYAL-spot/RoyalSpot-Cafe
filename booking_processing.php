@@ -19,13 +19,13 @@ if (file_exists(__DIR__ . '/.env')) {
 }
 
 // 3. Connect to Database (Using exact names from your .env)
+// Use the Traffic database
 $conn = new mysqli(
     $_ENV['DB_SERVER'], 
     $_ENV['DB_USERNAME'], 
     $_ENV['DB_PASSWORD'], 
-    $_ENV['DB_NAME']
+    $_ENV['DB_NAME_TRAFFIC'] // Points to royalspot_cafe
 );
-
 if ($conn->connect_error) {
     die("DATABASE CONNECTION FAILED: " . $conn->connect_error);
 }
