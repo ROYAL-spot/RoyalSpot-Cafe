@@ -1,52 +1,88 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-$conn = new mysqli($_ENV['DB_SERVER'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME_ORDERS']);
-
-if (isset($_POST['complete_id'])) {
-    $id = (int)$_POST['complete_id'];
-    $conn->query("UPDATE orders SET status = 'completed' WHERE id = $id");
+session_start();
+if(!isset($_SESSION['role']) || $_SESSION['role'] != 'kitchen'){
+    header("Location: login.php");
+    exit;
 }
-$result = $conn->query("SELECT * FROM orders WHERE status = 'pending' AND DATE(created_at) = CURDATE() ORDER BY created_at ASC");
+
+require 'db_connect.php';
+
+if (isset($_POST['order_id'], $_POST['status'])) {
+    $id = (int)$_POST['order_id'];
+    $status = $conn->real_escape_string($_POST['status']);
+    $conn->query("UPDATE orders SET status='$status', updated_at=NOW() WHERE id=$id");
+}
+
+function fetchOrders($conn, $status) {
+    return $conn->query("SELECT * FROM orders 
+                         WHERE status='$status' 
+                         AND DATE(created_at)=CURDATE()
+                         ORDER BY created_at ASC");
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kitchen Live Dashboard</title>
-    <meta http-equiv="refresh" content="30"> 
-    <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .order-card { background: #333; border-top: 8px solid #007bff; padding: 15px; border-radius: 8px; }
-        .order-header { font-weight: bold; font-size: 1.4rem; margin-bottom: 10px; border-bottom: 1px solid #444; }
-        .done-btn { background: #28a745; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; }
-    </style>
+<title>Kitchen Display</title>
+<style>
+body { background:#111; color:#fff; font-family:Arial; }
+.section { margin:20px; }
+.section h2 { border-bottom:2px solid #444; padding-bottom:5px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:15px; }
+
+.card { padding:15px; border-radius:10px; background:#1e1e1e; font-size:18px; }
+.pending { border-top:8px solid orange; }
+.preparing { border-top:8px solid #007bff; }
+.ready { border-top:8px solid #28a745; }
+
+.order-id { font-size:28px; color:#ff4444; font-weight:bold; }
+.time { color:#ccc; font-size:14px; }
+
+button { padding:8px 12px; margin:5px 3px; border:none; border-radius:6px; cursor:pointer; font-weight:bold; }
+.prep-btn { background:#007bff; color:#fff; }
+.ready-btn { background:#28a745; color:#fff; }
+.done-btn { background:#555; color:#fff; }
+</style>
 </head>
 <body>
-    <h1 style="text-align:center;">👨‍🍳 ACTIVE KITCHEN ORDERS</h1>
-    <div class="grid">
-        <?php while($row = $result->fetch_assoc()): 
-            $shortTable = str_replace('Table ', '', $row['table_num']); ?>
-            <div class="order-card">
-    <div class="order-header">Tbl<?php echo $shortTable; ?> #<?php echo $row['id']; ?></div>
-    
-    <div style="white-space: pre-wrap; margin-bottom: 10px;">
-        <?php echo htmlspecialchars($row['items']); ?>
-    </div>
 
-    <?php if(!empty($row['notes'])): ?>
-        <div style="background: #444; color: #ffcc00; padding: 8px; border-radius: 4px; font-style: italic; margin-top: 10px; border-left: 4px solid #ffcc00;">
-            <strong>Note:</strong> <?php echo nl2br(htmlspecialchars($row['notes'])); ?>
-        </div>
-    <?php endif; ?>
+<h1 style="text-align:center;">🍽 Kitchen Display System</h1>
+
+<?php
+$statuses = ['pending'=>'🟡 New Orders','preparing'=>'🔵 Preparing','ready'=>'🟢 Ready for Pickup'];
+
+foreach ($statuses as $key => $title) {
+    echo "<div class='section'><h2>$title</h2><div class='grid'>";
+    $orders = fetchOrders($conn, $key);
+    while($row = $orders->fetch_assoc()):
+        $minutes = floor((time() - strtotime($row['created_at'])) / 60);
+?>
+
+<div class="card <?php echo $key; ?>">
+    <div class="order-id">#<?php echo $row['id']; ?></div>
+    <div>Table: <?php echo htmlspecialchars($row['table_number']); ?></div>
+    <div class="time">⏱ <?php echo $minutes; ?> mins ago</div>
+    <hr>
+    <div><?php echo nl2br(htmlspecialchars($row['items'])); ?></div>
 
     <form method="POST">
-        <input type="hidden" name="complete_id" value="<?php echo $row['id']; ?>">
-        <button type="submit" class="done-btn">MARK DONE</button>
+        <input type="hidden" name="order_id" value="<?php echo $row['id']; ?>">
+        <?php if($key=='pending'): ?>
+            <button name="status" value="preparing" class="prep-btn">PREPARING</button>
+        <?php elseif($key=='preparing'): ?>
+            <button name="status" value="ready" class="ready-btn">READY</button>
+        <?php elseif($key=='ready'): ?>
+            <button name="status" value="completed" class="done-btn">DONE</button>
+        <?php endif; ?>
     </form>
 </div>
-        <?php endwhile; ?>
-    </div>
+
+<?php endwhile; echo "</div></div>"; } ?>
+
+<script>
+setInterval(function(){ location.reload(); },15000);
+</script>
+
 </body>
 </html>
