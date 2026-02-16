@@ -4,27 +4,29 @@ require 'db_connect.php';
 
 if(isset($_POST['login'])){
     $username = $conn->real_escape_string($_POST['username']);
-    $password = md5($_POST['password']);
+    $password_input = $_POST['password']; // Get plain text from user
 
-    $result = $conn->query("SELECT * FROM users 
-                            WHERE username='$username' 
-                            AND password='$password'");
+    // Fetch the user by username only
+    $result = $conn->query("SELECT * FROM users WHERE username='$username'");
 
     if($result->num_rows == 1){
         $user = $result->fetch_assoc();
-        $_SESSION['user'] = $user['full_name'];
-        $_SESSION['role'] = $user['role'];
+        
+        // Use password_verify to check the plain text against the hash
+        if (password_verify($password_input, $user['password'])) {
+            $_SESSION['user'] = $user['full_name'];
+            $_SESSION['role'] = $user['role'];
 
-        if($user['role'] == 'admin'){
-            header("Location: analytics_dashboard.php");
-        } elseif($user['role'] == 'kitchen'){
-            header("Location: kitchen.php");
+            // Redirect logic stays the same...
+            if($user['role'] == 'admin') header("Location: analytics_dashboard.php");
+            elseif($user['role'] == 'kitchen') header("Location: kitchen.php");
+            else header("Location: waiter_dashboard.php");
+            exit;
         } else {
-            header("Location: waiter_dashboard.php");
+            $error = "Invalid password";
         }
-        exit;
     } else {
-        $error = "Invalid credentials";
+        $error = "User not found";
     }
 }
 ?>
