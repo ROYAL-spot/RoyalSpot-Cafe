@@ -1,12 +1,25 @@
 <?php
+// -------------------------------
+// Persistent session for 24 hours
+// -------------------------------
+ini_set('session.gc_maxlifetime', 86400);
+session_set_cookie_params(86400);
 session_start();
+
+require 'db_connect.php';
+date_default_timezone_set('Africa/Johannesburg');
+
+// Auto-login via cookie if session expired
+if(!isset($_SESSION['role']) && isset($_COOKIE['user_role'])){
+    $_SESSION['user'] = $_COOKIE['user_name'];
+    $_SESSION['role'] = $_COOKIE['user_role'];
+}
+
+// Only waiter can access
 if(!isset($_SESSION['role']) || $_SESSION['role'] != 'waiter'){
     header("Location: login.php");
     exit;
 }
-
-require 'db_connect.php';
-date_default_timezone_set('Africa/Johannesburg');
 
 // Handle AJAX mark as served
 if(isset($_POST['serve_ajax'])){
