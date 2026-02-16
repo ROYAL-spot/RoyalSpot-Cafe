@@ -35,29 +35,29 @@
     </style>
 </head>
 <body>
-
     <div class="receipt">
         <h2 style="text-align:center; font-family: sans-serif;">RoyalSpot Cafe</h2>
-        <p style="text-align:center; font-weight:bold; color:#007bff; font-family: sans-serif;"><?php echo $orderNum; ?></p>
+        <p style="text-align:center; font-weight:bold; color:#007bff; font-family: sans-serif;"><?php echo htmlspecialchars($orderNum); ?></p>
         <hr style="border: 1px dashed #eee;">
         
-        <div style="white-space: pre-wrap;"><?php echo htmlspecialchars($items); ?></div>
+        <div style="white-space: pre-wrap; text-align: left; margin: 20px 0; font-size: 1.1rem;">
+            <?php echo htmlspecialchars($items); ?>
+        </div>
 
         <?php if(!empty($notes)): ?>
-            <p><strong>Note:</strong> <?php echo htmlspecialchars($notes); ?></p>
+            <div style="text-align: left; background: #fff9e6; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+                <strong>Note:</strong> <?php echo htmlspecialchars($notes); ?>
+            </div>
         <?php endif; ?>
 
-        <hr style="border: 1px dashed #eee;">
-        <div class="total">Total: R<?php echo $total; ?></div>
+        <hr style="border: 1px solid #333;">
+        <div class="total">TOTAL: R<?php echo htmlspecialchars($total); ?></div>
 
         <a href="<?php echo $waLink; ?>" class="wa-btn">
-            <i class="fab fa-whatsapp"></i> SEND TO KITCHEN
+            <i class="fab fa-whatsapp"></i> SEND TO WHATSAPP
         </a>
-
-        <div style="text-align:center;">
-            <a href="menu.html" class="modify">Modify order or add more</a>
-        </div>
+        
+        <a href="menu.html" class="modify">Modify or Place New Order</a>
     </div>
-
 </body>
 </html>

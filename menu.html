@@ -3,366 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RoyalSpot Cafe</title>
+    <title>RoyalSpot Cafe | Menu</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+        /* LAYOUT FIX: Prevent overlapping */
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 40px 20px;
+            align-items: flex-start; /* Crucial for sticky behavior */
         }
-        .container {
-            width: 80%;
-            margin: auto;
+
+        main {
+            flex: 1;
+            min-width: 300px;
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-        .menu-section {
-            margin: 2rem 0;
-        }
-        .menu-section h2 {
+
+        /* MENU CARD STYLING */
+        .section-header h2 {
             border-bottom: 2px solid #333;
-            padding-bottom: 0.5rem;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: #222;
+            text-transform: uppercase;
         }
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
-            padding: 1rem;
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .food-card {
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .menu-item button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .menu-item button:hover {
-            background-color: #218838;
-        }
-        .basket {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .basket h3 {
-            margin-top: 0;
-        }
-        .basket-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
+            flex-direction: column;
         }
-        .basket-item button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .basket-item button:hover {
-            background-color: #c82333;
-        }
-        .checkout {
-            text-align: right;
-            margin-top: 1rem;
-        }
-        .checkout button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .checkout button:hover {
-            background-color: #0056b3;
-        }
-        .special-notes textarea {
+
+        .food-card:hover { transform: translateY(-5px); }
+
+        .food-image {
             width: 100%;
-            height: 60px;
+            height: 180px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .food-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .food-info h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: #333; }
+
+        .food-description {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            min-height: 40px;
+        }
+
+        .food-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price-tag { font-weight: bold; font-size: 1.1rem; color: #e44d26; }
+
+        .add-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 15px;
             border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover { background: #007bff; }
+
+        /* STICKY TRAY STYLING */
+        #sticky-tray {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .tray-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .trash-icon { color: #dc3545; cursor: pointer; margin-left: 10px; }
+
+        .tray-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
             border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .tray-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .menu-container { flex-direction: column; }
+            #sticky-tray { position: static; width: 100%; order: -1; margin-bottom: 20px; }
         }
     </style>
 </head>
-
 <body>
     <header>
         <nav>
             <ul>
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="menu.html">MENU</a></li>
-                <li class="mobile"><a href="make_reservation.html">RESERVATIONS</a></li>
-                <li class="mobile"><a href="hours_and_contact.html">CONTACTS</a></li>
-                <li class="logo"><a href="index.html">RoyalSpot Cafe Logo</a></li>
+                <li class="logo"><a href="index.html">RoyalSpot</a></li>
                 <li class="desktop"><a href="make_reservation.html">RESERVATIONS</a></li>
                 <li class="desktop"><a href="hours_and_contact.html">CONTACTS</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="container">
-        <div class="table-selector">
-            <i class="fa fa-chair"></i>
-            <label for="tableNum"><strong>Where are you sitting?</strong></label>
-            <select id="tableNum">
+    <div class="menu-container">
+        <main>
+            <h1>RoyalSpot Cafe Menu</h1>
+            <div id="menu-sections-container">
+                </div>
+        </main>
+
+        <aside id="sticky-tray">
+            <h3><i class="fa fa-shopping-basket"></i> Your Tray</h3>
+            <div id="basket-items"></div>
+            <hr>
+            <div class="tray-total">
+                <span>Total:</span>
+                <span id="basket-total">R0</span>
+            </div>
+            
+            <label for="table-num">Table Number:</label>
+            <select id="table-num" class="tray-input" title="Select table number">
                 <option value="Table 1">Table 1</option>
                 <option value="Table 2">Table 2</option>
                 <option value="Table 3">Table 3</option>
                 <option value="Table 4">Table 4</option>
+                <option value="Table 5">Table 5</option>
             </select>
-        </div>
 
-    <div class="container">
-        <div class="menu-section" id="menu">
-            <h2>Burgers</h2>
-            <div class="menu-item">
-                <span>Classic Beef Burger - R45</span>
-                <button onclick="addToBasket('Classic Beef Burger', 45)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Chicken Burger - R40</span>
-                <button onclick="addToBasket('Chicken Burger', 40)">Add to Basket</button>
-            </div>
-
-            <h2>Pizzas</h2>
-            <div class="menu-item">
-                <span>Margherita Pizza - R55</span>
-                <button onclick="addToBasket('Margherita Pizza', 55)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>BBQ Chicken Pizza - R65</span>
-                <button onclick="addToBasket('BBQ Chicken Pizza', 65)">Add to Basket</button>
-            </div>
-
-            <h2>Desserts</h2>
-            <div class="menu-item">
-                <span>Chocolate Brownie - R30</span>
-                <button onclick="addToBasket('Chocolate Brownie', 30)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Ice Cream Sundae - R25</span>
-                <button onclick="addToBasket('Ice Cream Sundae', 25)">Add to Basket</button>
-            </div>
-
-            <h2>Drinks</h2>
-
-            <div class="menu-item">
-               <span>Orange juice - R15</span>
-               <button onclick="addToBasket('Orange juice', 15)">Add to Basket</button>
-            </div>
-
-               <div class="menu-item">
-                  <span>Sprite - R15</span>
-                  <button onclick="addToBasket('Sprite', 15)">Add to Basket</button>
-              </div>
-              <div class="menu-item">
-                <span>Coke - R15</span>
-                <button onclick="addToBasket('Coke', 15)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Water - R10</span>
-                <button onclick="addToBasket('Water', 10)">Add to Basket</button>
-            </div>
-
-            <h2>Beers</h2>
-            <div class="menu-item">
-                <span>Corona- R45</span>
-                <button onclick="addToBasket('Corona-', 35)">Add to Basket</button>
-            </div>
-            
-            <div class="menu-item">
-                <span>Carling Black Label - R35</span>
-                <button onclick="addToBasket('Carling Black Label', 35)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Castle Lager - R35</span>
-                <button onclick="addToBasket('Castle Lager', 35)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Heineken- R35</span>
-                <button onclick="addToBasket('Heineken-', 35)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Savanna Dry - R40</span>
-                <button onclick="addToBasket('Savanna Dry', 40)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Flying Fish- R40</span>
-                <button onclick="addToBasket('Flying Fish', 35)">Add to Basket</button>
-            </div>
-
-            <h2>Spirits</h2>
-            <div class="menu-item">
-                <span>Hendrick's Gin - R65</span>
-                <button onclick="addToBasket('Hendrick\'s Gin', 65)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Johnnie Walker Black Label Whiskey - R90</span>
-                <button onclick="addToBasket('Johnnie Walker Black Label Whiskey', 90)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Smirnoff Vodka - R50</span>
-                <button onclick="addToBasket('Smirnoff Vodka', 50)">Add to Basket</button>
-            </div>
-
-            <h2>Wines</h2>
-            <div class="menu-item">
-                <span>Nederburg Cabernet Sauvignon - R85</span>
-                <button onclick="addToBasket('Nederburg Cabernet Sauvignon', 85)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>Four Cousins Sweet Red Wine - R75</span>
-                <button onclick="addToBasket('Four Cousins Sweet Red Wine', 75)">Add to Basket</button>
-            </div>
-            <div class="menu-item">
-                <span>KWV Chardonnay - R90</span>
-                <button onclick="addToBasket('KWV Chardonnay', 90)">Add to Basket</button>
-            </div>
-        </div>
-
-        <div class="basket" id="basket">
-            <h3>Your Basket</h3>
-            <div id="basket-items"></div>
-            <div class="special-notes">
-                <label for="notes"><strong>Special Instructions:</strong></label><br>
-                <textarea id="notes" placeholder="e.g. No onions, Medium rare..."></textarea>
-            </div>
-            <div class="checkout">
-                <strong>Total: R<span id="total">0</span></strong>
-                <button onclick="checkout()">Checkout</button>
-            </div>
-            
-        </div>
+            <textarea id="order-notes" class="tray-input" placeholder="Special instructions..."></textarea>
+            <button onclick="checkout()" class="checkout-btn">CHECKOUT</button>
+        </aside>
     </div>
 
-    <footer>
-        <p>&copy;2024 RoyalSPOT CAFÉ. All rights reserved.</p>
-    </footer>
+    <script>
+        const menuData = {
+            burgers: {
+                title: "Gourmet Burgers",
+                icon: "fa-hamburger",
+                items: [
+                    ['Classic Beef', 95, '200g beef patty, garnish, secret sauce'],
+                    ['Cheese & Bacon', 115, 'Beef patty, aged cheddar, crispy macon'],
+                    ['The Zulu King', 135, 'Double patty, chakalaka, fried egg'],
+                    ['Spicy Chicken', 85, 'Crispy breast, peri-peri mayo'],
+                    ['Mushroom Swiss', 110, 'Beef patty, creamy mushroom sauce'],
+                    ['Veggie Delight', 90, 'Plant-based patty, avocado, sprouts'],
+                    ['Hawaiian Burger', 105, 'Beef patty, grilled pineapple'],
+                    ['Pretoria Blue', 125, 'Beef patty, blue cheese, caramel onions']
+                ]
+            },
+            pizza: {
+                title: "Wood-Fired Pizza",
+                icon: "fa-pizza-slice",
+                items: [
+                    ['Margherita', 85, 'Mozzarella, tomato, fresh basil'],
+                    ['Regina', 105, 'Ham and mushroom classic'],
+                    ['Hawaiian', 105, 'Ham and pineapple'],
+                    ['The Mexican', 125, 'Bolognaise, chili, onion, peppers'],
+                    ['BBQ Chicken', 115, 'Roasted chicken, BBQ sauce, mushroom'],
+                    ['Four Seasons', 130, 'Artichokes, olives, ham, mushrooms'],
+                    ['Meat Lovers', 145, 'Steak, ham, pepperoni, bacon'],
+                    ['Vegetarian', 110, 'Spinach, feta, olives, sundried tomato']
+                ]
+            },
+            seafood: {
+                title: "Coastal Seafood",
+                icon: "fa-fish",
+                items: [
+                    ['Fish & Chips', 110, 'Hake fillet in beer batter with tartar'],
+                    ['Grilled Calamari', 125, 'Lemon butter or peri-peri tubes'],
+                    ['Snoek & Apricot', 130, 'Traditional Cape snoek with glaze'],
+                    ['Prawn Platter', 185, '8 Queen prawns grilled in garlic butter'],
+                    ['Seafood Pasta', 145, 'Mixed seafood in creamy wine sauce'],
+                    ['Mussels in Pot', 95, 'Half-shell mussels in garlic cream'],
+                    ['Grilled Salmon', 220, 'Atlantic salmon with baby potatoes'],
+                    ['Platter for Two', 395, 'Hake, calamari, prawns, and mussels']
+                ]
+            },
+            desserts: {
+                title: "Sweet Treats",
+                icon: "fa-cake-candles",
+                items: [
+                    ['Malva Pudding', 55, 'Served warm with custard'],
+                    ['Peppermint Tart', 45, 'Classic SA fridge tart'],
+                    ['Chocolate Brownie', 50, 'With vanilla bean ice cream'],
+                    ['Ice Cream Scoop', 25, 'Vanilla, Chocolate, or Strawberry'],
+                    ['Cheesecake', 60, 'Baked New York style'],
+                    ['Fruit Salad', 40, 'Fresh seasonal local fruits'],
+                    ['Waffle & Syrup', 55, 'Topped with cream or ice cream'],
+                    ['Milkshake', 45, 'Thick gourmet milkshake']
+                ]
+            },
+            sides: {
+                title: "Sides",
+                icon: "fa-bowl-food",
+                items: [
+                    ['Large Fries', 35, 'Crispy golden potato chips'],
+                    ['Onion Rings', 30, 'Beer-battered giant rings'],
+                    ['Greek Salad', 45, 'Fresh greens, feta, and olives'],
+                    ['Chakalaka', 25, 'Traditional spicy vegetable relish']
+                ]
+            },
+            drinks: {
+                title: "Drinks",
+                icon: "fa-glass-water",
+                items: [
+                     ['Soft Drinks', 25, '300ml can', 'Cream-soda, Fanta, or Sprite'],
+                  
+                    ['Appletiser', 28, '330ml Can'],
+                    ['Still Water', 18, '500ml Bottle'],
+                    ['Sparkling Water', 18, '500ml Bottle'],
+                    ['Fresh Juice', 30, 'Orange, Guava, or Tropical']
 
- <script>
-    const basket = [];
+                ]
+            },
+            beers: {
+                title: "Cold Beers",
+                icon: "fa-beer-mug-empty",
+                items: [
+                    ['Castle Lite', 32, '340ml Bottle'],
+                    ['Corona Extra', 40, '340ml Bottle'],
+                    ['Windhoek Lager', 35, '340ml Bottle'],
+                    ['Heineken', 38, '340ml Bottle'],
+                    ['Savanna Dry', 38, '340ml Bottle']
+                ]
+            },
+            wines: {
+                title: "Wine Selection",
+                icon: "fa-wine-glass",
+                items: [
+                    ['House Red Glass', 45, 'Merlot or Cabernet'],
+                    ['House White Glass', 45, 'Sauvignon or Chenin'],
+                    ['Sauvignon Blanc', 180, 'Full bottle - 750ml'],
+                    ['KWV Pinotage', 195, 'Local favorite - 750ml'],
+                    ['Rosé Bottle', 160, 'Sweet and fruity']
+                ]
+            },
+            spirits: {
+                title: "Spirits",
+                icon: "fa-whiskey-glass",
+                items: [
+                    ['Double Brandy & Coke', 65, 'KWV 3yr'],
+                    ['Gin & Tonic', 60, 'Craft gin and pink tonic'],
+                    ['Whiskey Neat', 55, 'Jameson Select shot'],
+                    ['Tequila Shot', 35, 'Gold with lime and salt']
+                ]
+            }
+        };
 
-    window.onload = function() {
-    const savedBasket = localStorage.getItem('cafe_basket');
-    if (savedBasket) {
-        basket.push(...JSON.parse(savedBasket));
-        updateBasket();
-    }
-};
+        // RENDER MENU
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById('menu-sections-container');
+            let menuHTML = '';
 
-    function addToBasket(item, price) {
-        basket.push({ item, price });
-        updateBasket();
-    }
+            for (const key in menuData) {
+                const section = menuData[key];
+                menuHTML += `
+                    <div class="section-header"><h2><i class="fa ${section.icon}"></i> ${section.title}</h2></div>
+                    <div class="menu-grid">
+                        ${section.items.map((item, i) => `
+                            <div class="food-card">
+                                <img src="images/${key}_${i}.jpg" class="food-image" onerror="this.src='images/placeholder.jpg'">
+                                <div class="food-info">
+                                    <h3>${item[0]}</h3>
+                                    <p class="food-description">${item[2]}</p>
+                                    <div class="food-footer">
+                                        <span class="price-tag">R${item[1]}</span>
+                                        <button class="add-btn" onclick="addToBasket('${item[0]}', ${item[1]})">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            container.innerHTML = menuHTML;
+            updateUI();
+        });
 
-    function removeFromBasket(index) {
-        basket.splice(index, 1);
-        updateBasket();
-    }
+        // BASKET LOGIC
+        let basket = JSON.parse(localStorage.getItem('royalspot_basket')) || [];
 
-   function updateBasket() {
-    const basketItems = document.getElementById('basket-items');
-    const total = document.getElementById('total');
-    basketItems.innerHTML = '';
-    let totalPrice = 0;
+        function addToBasket(name, price) {
+            basket.push({ name, price });
+            updateUI();
+        }
+
+        function removeFromBasket(index) {
+            basket.splice(index, 1);
+            updateUI();
+        }
+
+        function updateUI() {
+            localStorage.setItem('royalspot_basket', JSON.stringify(basket));
+            const container = document.getElementById('basket-items');
+            const totalEl = document.getElementById('basket-total');
+            
+            if (basket.length === 0) {
+                container.innerHTML = '<p style="color: #999;">Tray is empty...</p>';
+                totalEl.innerText = 'R0';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            basket.forEach((item, index) => {
+                html += `<div class="tray-item">
+                            <span>${item.name}</span>
+                            <span>R${item.price} <i class="fa fa-trash trash-icon" onclick="removeFromBasket(${index})"></i></span>
+                         </div>`;
+                total += item.price;
+            });
+            container.innerHTML = html;
+            totalEl.innerText = 'R' + total;
+        }
+
+        function checkout() {
+    if (basket.length === 0) { alert("Please add items!"); return; }
+
+    // This creates the bulleted list: Each item starts with • and ends with a new line
+    const itemsString = basket.map(i => "• " + i.name).join("\n");
     
-    basket.forEach((basketItem, index) => {
-        totalPrice += basketItem.price;
-        basketItems.innerHTML += `
-            <div class="basket-item">
-                <span>${basketItem.item} - R${basketItem.price}</span>
-                <button onclick="removeFromBasket(${index})">Remove</button>
-            </div>
-        `;
-    });
-    total.textContent = totalPrice;
-    // Save to memory so it stays there if they "Modify"
-    localStorage.setItem('cafe_basket', JSON.stringify(basket));
-}
-
-function checkout() {
-    if (basket.length === 0) {
-        alert('Your basket is empty!');
-        return;
-    }
-
-    const tableNum = document.getElementById('tableNum').value;
-    const totalPrice = document.getElementById('total').textContent;
-    const notes = document.getElementById('notes').value; 
-    let itemsList = "";
-    
-    basket.forEach(item => {
-        itemsList += `• ${item.item} - R${item.price}\n`;
-    });
-
+    const total = basket.reduce((sum, i) => sum + i.price, 0);
+    const notes = document.getElementById('order-notes').value; // 1. Get the value
+    const tableNum = document.getElementById('table-num').value;
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = 'save_orders.php';
-
-    const fields = {
-        table_num: tableNum,
-        items: itemsList,
-        notes: notes,
-        total: totalPrice
+    
+    // We send the formatted itemsString to save_orders.php
+    const fields = { 
+        'table_num': tableNum, 
+        'items': itemsString, 
+        'notes': notes, // 2. Make sure this key is exactly 'notes'
+        'total': total 
     };
-
     for (const key in fields) {
         const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = fields[key];
+        input.type = 'hidden'; 
+        input.name = key; 
+        input.value = fields[key]; 
         form.appendChild(input);
     }
-
+    
     document.body.appendChild(form);
+    localStorage.removeItem('royalspot_basket');
     form.submit();
 }
-
-    function showConfirmation() {
-        // Create elements if they don't exist
-        if (!document.getElementById('order-confirmation')) {
-            const overlay = document.createElement('div');
-            overlay.id = 'overlay';
-            overlay.className = 'overlay';
-            
-            const box = document.createElement('div');
-            box.id = 'order-confirmation';
-            box.innerHTML = `
-                <i class="fa fa-check-circle" style="color: #28a745; font-size: 3rem;"></i>
-                <h2>Order Sent!</h2>
-                <p>We've opened WhatsApp to send your order to the kitchen.</p>
-                <button onclick="closeConfirmation()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Got it</button>
-            `;
-            
-            document.body.appendChild(overlay);
-            document.body.appendChild(box);
-        }
-        
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('order-confirmation').style.display = 'block';
-    }
-
-    function closeConfirmation() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('order-confirmation').style.display = 'none';
-    }
-</script>
+    </script>
 </body>
 </html>

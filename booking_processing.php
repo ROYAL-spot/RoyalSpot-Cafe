@@ -1,5 +1,5 @@
 <?php
-// 1. Show all errors so we stop the blank screen
+// 1. Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -15,26 +15,45 @@ if (file_exists(__DIR__ . '/.env')) {
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 } else {
-    die("STOP: .env file missing in this folder!");
+    die("STOP: .env file missing!");
 }
 
-// 3. Connect to Database (Using exact names from your .env)
-// Use the Traffic database
+// 3. Connect to Database
 $conn = new mysqli(
-    $_ENV['DB_SERVER'], 
-    $_ENV['DB_USERNAME'], 
-    $_ENV['DB_PASSWORD'], 
-    $_ENV['DB_NAME_TRAFFIC'] // Points to royalspot_cafe
+    $_ENV['DB_SERVER'],   // localhost
+    $_ENV['DB_USERNAME'], // root
+    $_ENV['DB_PASSWORD'], // (blank)
+    $_ENV['DB_NAME']      // royalspot_cafe
 );
+
 if ($conn->connect_error) {
     die("DATABASE CONNECTION FAILED: " . $conn->connect_error);
 }
 
-// 4. Capture Data (Fixed to match your HTML form names)
+// 4. Capture and Validate Date
+$date = $_POST['booking-date'] ?? ''; // FIXED: Changed variable name to match usage below
+
+if (!empty($date)) {
+    $today = new DateTime(); 
+    $booking_date = new DateTime($date);
+    
+    // Calculate difference
+    $interval = $today->diff($booking_date);
+    $days_ahead = (int)$interval->format('%r%a');
+
+    if ($days_ahead < 2) {
+        echo "<script>
+                alert('Reservations must be made at least 2 days in advance. Please select a later date.');
+                window.history.back();
+              </script>";
+        exit;
+    }
+}
+
+// Capture other fields
 $name     = $_POST['customer-name'] ?? '';
 $email    = $_POST['customer-email'] ?? '';
 $phone    = $_POST['customer-phone'] ?? '';
-$date     = $_POST['booking-date'] ?? '';
 $time     = $_POST['booking-time'] ?? '';
 $guests   = $_POST['number-of-guests'] ?? 1;
 $smoking  = $_POST['smoking-preference'] ?? 'non-smoking';
@@ -48,7 +67,8 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssssiss", $name, $email, $phone, $date, $time, $guests, $smoking, $location);
 
 if ($stmt->execute()) {
-    // 6. Send Email
+    
+    // 6. Send Confirmation Email to Management
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -63,15 +83,30 @@ if ($stmt->execute()) {
         $mail->addAddress($_ENV['SMTP_USERNAME']); 
 
         $mail->isHTML(true);
-        $mail->Subject = "New Reservation: $name";
-        $mail->Body    = "You have a new booking for $guests guests on $date at $time.";
+        $mail->Subject = "New Reservation Alert: $name";
+        $mail->Body    = "<h3>New Booking Received</h3>
+                          <p><strong>Name:</strong> $name</p>
+                          <p><strong>Email:</strong> $email</p>
+                          <p><strong>Phone:</strong> $phone</p>
+                          <p><strong>Guests:</strong> $guests</p>
+                          <p><strong>Date:</strong> $date at $time</p>
+                          <p><strong>Preference:</strong> $smoking, $location</p>";
 
         $mail->send();
-        echo "<h1>Success!</h1><p>Your reservation is confirmed. See you soon!</p>";
+        
+        // Redirect to a success page
+        header("Location: index.html?status=success");
+        exit;
+
     } catch (Exception $e) {
-        // This tells us if the Gmail part failed but the database worked
-        echo "<h1>Saved!</h1><p>Booking saved, but email notification failed. Error: {$mail->ErrorInfo}</p>";
+        // Even if email fails, the DB record is saved.
+        header("Location: index.html?status=db_saved_email_error");
+        exit;
     }
 } else {
-    echo "<h1>Error</h1><p>Database save failed: " . $stmt->error . "</p>";
+    echo "Error: " . $stmt->error;
 }
+
+$stmt->close();
+$conn->close();
+?>
